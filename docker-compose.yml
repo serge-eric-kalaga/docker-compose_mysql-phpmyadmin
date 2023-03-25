@@ -2,31 +2,34 @@ version: '3'
 
 services:
   mysql_test:
-    image: mysql
+    image: mysql:latest
     container_name: mysql_test
     restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD = 1234
-      - MYSQL_DATABASE = test
-      - MYSQL_USER = serge
-      - MYSQL_PASSWORD = 1234
     volumes:
       - ./data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=test_db
     networks:
-      - my_network
+      - my_networks
 
   
   phpmyadmin_test:
-    image: phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
     restart: always
     ports:
-      - 8080:81
+      - 8181:80
     environment:
-      - PMA_HOST = mysql_test
-      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql_test
+      # - PMA_ARBITRARY=1
+    depends_on:
+      - mysql_test
     networks:
-      - my_network
+      - my_networks
+
 
 
 networks:
-  my_network:
+  my_networks:
+
+
